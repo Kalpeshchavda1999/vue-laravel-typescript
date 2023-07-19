@@ -1,0 +1,18 @@
+{
+    "create_new_account": "Create New Account",
+    "full_name": "Full Name",
+    "email_address": "Email address",
+    "mobile_number": "Mobile Number",
+    "password": "Password",
+    "confirm_password": "Confirm Password",
+    "sign_up": "Sign Up",
+    "sign_in": "Sign In",
+    "already_a_member": "Already a member",
+    "name_required": "A valid Name is required",
+    "email_required": "A valid email is required",
+    "email_exists": "Email already exists",
+    "phone_number_validate": "A Phone number is not valid",
+    "password_leanth": "Password must be at least 8 characters",
+    "password_contatins_email": "Password cannot contain your email",
+    "password_match": "Passwords do not match"
+}

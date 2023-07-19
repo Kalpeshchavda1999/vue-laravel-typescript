@@ -3,14 +3,16 @@
         <div class="sm:mx-auto sm:w-full sm:max-w-sm">
             <img class="mx-auto h-10 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
                 alt="" />
-            <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight dark:text-light">Create New Account
+            <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight dark:text-light">{{
+                $t('create_new_account') }}
             </h2>
         </div>
 
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
             <form class="space-y-6" action="#" method="POST" @click.prevent="submitRegister">
                 <Field v-slot="{ field, errorMessage, handleChange, handleBlur }" name="fullName">
-                    <label for="fullName" class="block text-sm font-medium leading-6 dark:text-light">Full Name</label>
+                    <label for="fullName" class="block text-sm font-medium leading-6 dark:text-light">{{ $t('full_name')
+                    }}</label>
                     <div class="mt-2">
                         <input id="fullName" name="fullName" type="text" required v-model="field.value"
                             @keyup="handleChange" rules="[v => !!v || 'Item is required']" @blur="handleBlur"
@@ -20,7 +22,8 @@
 
                 </Field>
                 <Field v-slot="{ field, errorMessage, handleChange, handleBlur }" name="email">
-                    <label for="email" class="block text-sm font-medium leading-6 dark:text-light">Email address</label>
+                    <label for="email" class="block text-sm font-medium leading-6 dark:text-light">{{ $t('email_address')
+                    }}</label>
                     <div class="mt-2">
                         <input id="email" name="email" type="email" autocomplete="email" required v-model="field.value"
                             @blur="handleBlur" @change="handleChange"
@@ -30,7 +33,7 @@
                 </Field>
 
                 <Field v-slot="{ field, errorMessage, handleChange, handleBlur }" name="phoneNumber">
-                    <label class="block text-sm font-medium leading-6 dark:text-light">Mobile Number</label>
+                    <label class="block text-sm font-medium leading-6 dark:text-light">{{ $t('mobile_number') }}</label>
                     <div class="mt-2">
                         <vue-tel-input v-on:country-changed="countryChanged" v-model="field.value" @blur="handleBlur"
                             @keyup="handleChange"></vue-tel-input>
@@ -41,7 +44,8 @@
 
                 <Field v-slot="{ field, errorMessage, handleChange, handleBlur }" name="password">
                     <div class="flex items-center justify-between">
-                        <label for="password" class="block text-sm font-medium leading-6 dark:text-light">Password</label>
+                        <label for="password" class="block text-sm font-medium leading-6 dark:text-light">{{ $t('password')
+                        }}</label>
                     </div>
                     <div class="mt-2">
                         <input id="password" name="password" type="password" autocomplete="current-password" required
@@ -54,8 +58,8 @@
 
                 <Field v-slot="{ field, errorMessage, handleChange, handleBlur }" name="confirmPassword">
                     <div class="flex items-center justify-between">
-                        <label for="confirmPassword" class="block text-sm font-medium leading-6 dark:text-light">Confirm
-                            Password</label>
+                        <label for="confirmPassword" class="block text-sm font-medium leading-6 dark:text-light">{{
+                            $t('confirm_password') }}</label>
                     </div>
                     <div class="mt-2">
                         <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="current-password"
@@ -67,16 +71,16 @@
 
                 <div>
                     <button type="submit"
-                        class="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm font-semibold leading-6 dark:text-light shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">Sign
-                        Up</button>
+                        class="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm font-semibold leading-6 dark:text-light shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">{{
+                            $t('sign_up') }}</button>
                 </div>
             </form>
 
 
             <p class="mt-10 text-center text-sm text-gray-400">
-                Already a member?
+                {{ $t('already_a_member') }}?
                 {{ ' ' }}
-                <a href="#" class="font-semibold leading-6 text-indigo-400 hover:text-indigo-300"> Sign-In
+                <a href="#" class="font-semibold leading-6 text-indigo-400 hover:text-indigo-300"> {{ $t('sign_in') }}
                 </a>
             </p>
         </div>
@@ -85,11 +89,13 @@
 
 <script lang="ts" setup>
 
-import { computed, reactive, ref } from "vue";
+import { computed, ref } from "vue";
 import { Field, useForm } from 'vee-validate'
 import { useRouter } from "vue-router";
 import { toTypedSchema } from '@vee-validate/zod'
 import { z } from 'zod'
+import { useI18n } from 'vue-i18n';
+import axiosInstance from '@/libs/axiosInstance'
 
 const fullName = ref("");
 const contry = ref("");
@@ -104,12 +110,13 @@ const countryChanged = (country: any) => {
 }
 
 const VALIDATION_TEXT = {
-    NAME_REQUIRED: 'A valid Name is required',
-    EMAIL_REQUIRED: 'A valid email is required',
-    PHONE_NUMBER_VALIDATE: 'A Phone number is not valid',
-    PASSWORD_LENGTH: 'Password must be at least 8 characters',
-    PASSWORD_CONTAINS_EMAIL: 'Password cannot contain your email',
-    PASSWORD_MATCH: 'Passwords do not match',
+    NAME_REQUIRED: useI18n().t('name_required'),
+    EMAIL_REQUIRED: useI18n().t('email_required'),
+    EMAIL_EXISTS: useI18n().t('email_exists'),
+    PHONE_NUMBER_VALIDATE: useI18n().t('phone_number_validate'),
+    PASSWORD_LENGTH: useI18n().t('password_leanth'),
+    PASSWORD_CONTAINS_EMAIL: useI18n().t('password_contatins_email'),
+    PASSWORD_MATCH: useI18n().t('password_match'),
 }
 
 const zodSchema = z.object({
@@ -118,16 +125,20 @@ const zodSchema = z.object({
     phoneNumber: z.string().min(10, VALIDATION_TEXT.PHONE_NUMBER_VALIDATE),
     password: z.string().min(8, VALIDATION_TEXT.PASSWORD_LENGTH),
     confirmPassword: z.string(),
-}).superRefine((data, ctx) => {
+}).superRefine( async (data, ctx) => {
+    console.log('data.email', data.email !== "", ctx);
+
     if (data.email !== "") {
+
+        const test  = await axiosInstance.get('test');
+
 
         ctx.addIssue({
             code: z.ZodIssueCode.custom,
-            message: VALIDATION_TEXT.PASSWORD_MATCH,
-            path: ['confirmPassword'],
+            message: VALIDATION_TEXT.EMAIL_EXISTS,
+            path: ['email'],
         })
     }
-    console.log('data.email',data,ctx);
 
     if (data.password.includes(data.email)) {
         ctx.addIssue({

@@ -8,12 +8,12 @@ import axios, {
     type AxiosResponse,
 } from "axios";
 
-const authStore = useAuthStore();
-const interfaceStore = useInterFaceStore();
+
 
 const onRequest = (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
     const { method, url } = config;
-
+    const authStore = useAuthStore();
+    const interfaceStore = useInterFaceStore();
     const token = authStore.token;
     interfaceStore.isLoading = true;
 
@@ -31,6 +31,8 @@ const onRequest = (config: InternalAxiosRequestConfig): InternalAxiosRequestConf
 const onResponse = (response: AxiosResponse): AxiosResponse => {
     const { method, url } = response.config;
     const { status } = response;
+    const interfaceStore = useInterFaceStore();
+
     interfaceStore.isLoading = false;
 
     if (status !== 200) {
@@ -83,7 +85,8 @@ const onErrorResponse = (error: AxiosError | Error): Promise<AxiosError> => {
     return Promise.reject(error);
 };
 
-const baseURL = 'http://127.0.0.1:8000';
+const baseURL = import.meta.env.VITE_BASE_URL;
+console.log('saas',baseURL);
 
 const axiosInstance: AxiosInstance = axios.create({
     baseURL,
