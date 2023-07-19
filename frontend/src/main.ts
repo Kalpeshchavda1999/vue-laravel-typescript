@@ -1,25 +1,17 @@
-import '@/assets/main.css'
-import '@/assets/base.css'
-import '@/index.css'
-import '@/services/themeSetup'
+import '@/libs/mainCss'
 import VueTelInput from 'vue3-tel-input';
-import 'vue3-tel-input/dist/vue3-tel-input.css'
-
-const VueTelInputOptions = {
-    mode: "international",
-    onlyCountries: ["IN"]
-}
-
+import VueTelInputOptions from '@/libs/VueTelInput'
+import Vue3Toastify, { type ToastContainerOptions } from 'vue3-toastify';
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-
 import App from './App.vue'
 import router from './router'
 
 const app = createApp(App)
-
 app.use(createPinia())
 app.use(router)
 app.use(VueTelInput, VueTelInputOptions);
-
+app.use(Vue3Toastify, {
+    autoClose: 3000,
+} as ToastContainerOptions);
 app.mount('#app')
