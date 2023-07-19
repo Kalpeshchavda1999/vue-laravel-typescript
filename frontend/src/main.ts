@@ -1,5 +1,5 @@
 import '@/libs/mainCss'
-import VueTelInput from 'vue3-tel-input';
+import VueTelInput from 'vue3-tel-input'
 import VueTelInputOptions from '@/libs/VueTelInput'
 import Vue3Toastify, { type ToastContainerOptions } from 'vue3-toastify';
 import { createApp } from 'vue'

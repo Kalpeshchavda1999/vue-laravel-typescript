@@ -10,6 +10,9 @@
   "compilerOptions": {
     "composite": true,
     "module": "ESNext",
-    "types": ["node"]
+    "types": ["node"],
+    "typeRoots": ["./typings", "./node_modules/@types/"],
+    "noImplicitAny": false,
+    "allowJs": true,
   }
 }
