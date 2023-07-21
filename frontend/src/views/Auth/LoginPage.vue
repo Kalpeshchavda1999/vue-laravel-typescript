@@ -5,54 +5,99 @@
                 <div>
                     <img class="h-10 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
                         alt="Your Company" />
-                    <h2 class="mt-8 text-2xl font-bold leading-9 tracking-tight text-gray-900">{{
+                    <h2 class="mt-8 text-2xl font-bold leading-9 tracking-tight text-gray-900 dark:text-light">{{
                         $t('sign_in_to_your_account') }}</h2>
-                    <p class="mt-2 text-sm leading-6 text-gray-500">
+                    <p class="mt-2 text-sm leading-6 text-gray-500 dark:text-light">
                         {{ $t('not_a_member') }}?
                         {{ ' ' }}
-                        <a href="#" class="font-semibold text-indigo-600 hover:text-indigo-500">{{ $t('sign_up') }}</a>
+                        <router-link to="/register"
+                            class="font-semibold text-indigo-600 hover:text-indigo-500 dark:text-light">{{ $t('sign_up')
+                            }}</router-link>
                     </p>
                 </div>
 
                 <div class="mt-10">
                     <div>
                         <form action="#" method="POST" class="space-y-6">
-                            <div>
-                                <label for="email" class="block text-sm font-medium leading-6 text-gray-900">{{
-                                    $t('email_address') }}</label>
-                                <div class="mt-2">
-                                    <input id="email" name="email" type="email" autocomplete="email" required
-                                        class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-                                </div>
-                            </div>
+                            <user-login :isMobile="isMobile">
+                                <template #email>
+                                    <Field v-slot="{ field, errorMessage, handleChange, handleBlur }" name="email">
+                                        <div class="flex items-center justify-between">
+                                            <label for="email"
+                                                class="block text-sm font-medium leading-6 text-gray-900 dark:text-light">{{
+                                                    $t('email_address') }}</label>
+                                            <div class="text-sm">
+                                                <a @click="UseMobile"
+                                                    class="cursor-pointer text-indigo-400 hover:text-indigo-300 dark:text-light">{{
+                                                        $t('use_email')
+                                                    }} ?</a>
+                                            </div>
+                                        </div>
+                                        <div class="mt-2">
+                                            <input id="email" name="email" type="email" autocomplete="email" required
+                                                v-model="field.value" @change="handleChange" @blur="handleBlur"
+                                                class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:text-light" />
+                                            <p v-if="errorMessage" class="mt-2 text-sm text-red-600 dark:text-red-500 ">{{
+                                                errorMessage }}</p>
+                                        </div>
+                                    </Field>
+                                </template>
+                            </user-login>
 
-                            <div>
-                                <label for="password" class="block text-sm font-medium leading-6 text-gray-900">{{
-                                    $t('password') }}</label>
+                            <user-login :isMobile="isMobile">
+                                <Field v-slot="{ field, errorMessage, handleChange, handleBlur }" name="phoneNumber">
+                                    <div class="flex items-center justify-between">
+                                        <label for="email"
+                                            class="block text-sm font-medium leading-6 text-gray-900 dark:text-light">{{
+                                                $t('mobile_number') }}</label>
+                                        <div class="text-sm">
+                                            <a @click="UseMobile"
+                                                class="cursor-pointer text-indigo-400 hover:text-indigo-300 dark:text-light">{{
+                                                    $t('use_phone')
+                                                }}</a>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <vue-tel-input v-on:country-changed="countryChanged" v-model="field.value"
+                                            @blur="handleBlur" @keyup="handleChange"></vue-tel-input>
+                                        <p v-if="errorMessage" class="mt-2 text-sm text-red-600 dark:text-red-500">{{
+                                            errorMessage }}</p>
+                                    </div>
+                                </Field>
+                            </user-login>
+
+                            <Field v-slot="{ field, errorMessage, handleChange, handleBlur }" name="password">
+                                <label for="password"
+                                    class="block text-sm font-medium leading-6 text-gray-900 dark:text-light">{{
+                                        $t('password') }}</label>
                                 <div class="mt-2">
                                     <input id="password" name="password" type="password" autocomplete="current-password"
-                                        required
-                                        class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                                        v-model="field.value" @keypress="handleChange" @blur="handleBlur" required
+                                        class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:text-light" />
+                                    <p v-if="errorMessage" class="mt-2 text-sm text-red-600 dark:text-red-500">{{
+                                        errorMessage }}</p>
                                 </div>
-                            </div>
+                            </Field>
 
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center">
-                                    <input id="remember-me" name="remember-me" type="checkbox"
-                                        class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" />
-                                    <label for="remember-me" class="ml-3 block text-sm leading-6 text-gray-700">{{
-                                        $t('remember_me') }}</label>
+                                    <input id="remember-me" name="remember-me" type="checkbox" v-model="rememberMe"
+                                        class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 dark:text-light" />
+                                    <label for="remember-me"
+                                        class="ml-3 block text-sm leading-6 text-gray-700 dark:text-light">{{
+                                            $t('remember_me') }}</label>
                                 </div>
 
                                 <div class="text-sm leading-6">
-                                    <a href="#" class="font-semibold text-indigo-600 hover:text-indigo-500">{{
-                                        $t('forgot_password') }}?</a>
+                                    <a href="#"
+                                        class="font-semibold text-indigo-600 hover:text-indigo-500 dark:text-light">{{
+                                            $t('forgot_password') }}?</a>
                                 </div>
                             </div>
 
                             <div>
                                 <button type="submit"
-                                    class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 dark:text-light shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                                    class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 dark:text-light shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:text-light">
                                     {{ $t('sign_in') }}</button>
                             </div>
                         </form>
@@ -64,7 +109,8 @@
                                 <div class="w-full border-gray-200" />
                             </div>
                             <div class="relative flex justify-center text-sm font-medium leading-6">
-                                <span class="bg-white px-6 text-gray-900">{{ $t('or_continue_with') }}</span>
+                                <span class="bg-white px-6 text-gray-900 dark:text-light">{{ $t('or_continue_with')
+                                }}</span>
                             </div>
                         </div>
 
@@ -75,7 +121,7 @@
                                     <path
                                         d="M6.29 18.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0020 3.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.073 4.073 0 01.8 7.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 010 16.407a11.616 11.616 0 006.29 1.84" />
                                 </svg>
-                                <span class="text-sm font-semibold leading-6 text-light">Twitter</span>
+                                <span class="text-sm font-semibold leading-6 text-light">{{ $t('twitter') }}</span>
                             </a>
 
                             <a href="#"
@@ -85,7 +131,7 @@
                                         d="M10 0C4.477 0 0 4.484 0 10.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0110 4.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.942.359.31.678.921.678 1.856 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0020 10.017C20 4.484 15.522 0 10 0z"
                                         clip-rule="evenodd" />
                                 </svg>
-                                <span class="text-sm font-semibold leading-6 text-light">GitHub</span>
+                                <span class="text-sm font-semibold leading-6 text-light">{{ $t('gitHub') }}</span>
                             </a>
                         </div>
                     </div>
@@ -100,3 +146,73 @@
     </div>
 </template>
 
+<script setup lang="ts">
+import { Field, useForm } from 'vee-validate'
+import { toTypedSchema } from '@vee-validate/zod'
+import { z } from 'zod'
+import { computed, ref } from "vue";
+import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+import UserLogin from '../../components/Auth/UserLogin.vue'
+
+const contry = ref("");
+const phoneNumber = ref("");
+const email = ref("");
+const password = ref("");
+const loading = ref(false);
+const router = useRouter()
+const isMobile = ref(false);
+const rememberMe = ref(false);
+
+const countryChanged = (country: any) => {
+    contry.value = country?.dialCode
+}
+
+const UseMobile = () => {
+    isMobile.value = !isMobile.value
+}
+
+const VALIDATION_TEXT = {
+    EMAIL_REQUIRED: useI18n().t('email_required'),
+    EMAIL_EXISTS: useI18n().t('email_exists'),
+    PHONE_NUMBER_VALIDATE: useI18n().t('phone_number_validate'),
+    PASSWORD_LENGTH: useI18n().t('password_leanth'),
+}
+
+const zodSchema = z.object({
+    email: z.string().email(VALIDATION_TEXT.EMAIL_REQUIRED),
+    phoneNumber: z.string().min(10, VALIDATION_TEXT.PHONE_NUMBER_VALIDATE),
+    password: z.string().min(8, VALIDATION_TEXT.PASSWORD_LENGTH),
+});
+
+type FormInput = z.infer<typeof zodSchema>
+const validationSchema = toTypedSchema(zodSchema)
+
+const initialValues = computed<FormInput>(() => ({
+    email: '',
+    phoneNumber: '',
+    password: '',
+}))
+
+const { handleSubmit, isSubmitting } = useForm({
+    validationSchema,
+    initialValues,
+})
+
+const submitRegister = handleSubmit(async (values: any) => {
+    loading.value = true
+    email.value = values.email
+    password.value = values.password
+    phoneNumber.value = values.phoneNumber
+    try {
+
+
+    } catch (e: any) {
+        console.log('error', e.message)
+
+    } finally {
+        loading.value = false
+    }
+})
+
+</script>
