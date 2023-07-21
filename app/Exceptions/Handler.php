@@ -52,24 +52,25 @@ class Handler extends ExceptionHandler
         });
     }
 
-    // protected function unauthenticated($request, AuthenticationException $exception)
-    // {
-    //     if ($request->expectsJson()) {
-    //         return response()->json(['error' => 'Unauthenticated.'], 401);
-    //     }
+    protected function unauthenticated($request, AuthenticationException $exception)
+    {
+
+        if ($request->expectsJson()) {
+            return response()->json(['error' => 'Unauthenticated.'], 401);
+        }
 
 
-    //     $guard = Arr::get($exception->guards(), 0);
-    //     $frontend_url = config('app.frontend_url');
-    //     switch ($guard) {
-    //         case 'users':
-    //         case 'shop_keepers':
-    //             return redirect($frontend_url);
-    //             break;
-    //         default:
-    //             return redirect($frontend_url);
-    //             break;
-    //     }
-    //     return redirect()->guest($frontend_url);
-    // }
+        $guard = Arr::get($exception->guards(), 0);
+        $frontend_url = config('app.frontend_url');
+        switch ($guard) {
+            case 'users':
+            case 'shop_keepers':
+                return redirect($frontend_url);
+                break;
+            default:
+                return redirect($frontend_url);
+                break;
+        }
+        return redirect()->guest($frontend_url);
+    }
 }
