@@ -12,12 +12,15 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('shop_keepers', function (Blueprint $table) {
+        Schema::create('shopkeepers', function (Blueprint $table) {
             $table->id();
             $table->uuid('shopkeeper_id')->unique();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('contry');
+            $table->string('phone_number')->unique();
             $table->timestamp('email_verified_at')->nullable();
+            $table->timestamp('phone_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
@@ -31,6 +34,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('shop_keepers');
+        Schema::dropIfExists('shopkeepers');
     }
 };

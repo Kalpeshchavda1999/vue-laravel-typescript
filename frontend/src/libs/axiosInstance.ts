@@ -1,21 +1,20 @@
 import router from "@/router";
 import { useAuthStore } from "@/stores/auth";
-import { useInterFaceStore } from "@/stores/interFaceStore";
 import axios, {
     type AxiosError,
     type AxiosInstance,
     type InternalAxiosRequestConfig,
     type AxiosResponse,
 } from "axios";
+import { toast } from "vue3-toastify";
 
 
 
 const onRequest = (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
     const { method, url } = config;
     const authStore = useAuthStore();
-    const interfaceStore = useInterFaceStore();
     const token = authStore.token;
-    interfaceStore.isLoading = true;
+    authStore.isLoading = true;
 
     if (token) {
         config.headers['Authorization'] = `Bearer ${token}`;
@@ -31,11 +30,14 @@ const onRequest = (config: InternalAxiosRequestConfig): InternalAxiosRequestConf
 const onResponse = (response: AxiosResponse): AxiosResponse => {
     const { method, url } = response.config;
     const { status } = response;
-    const interfaceStore = useInterFaceStore();
+    const authStore = useAuthStore();
 
-    interfaceStore.isLoading = false;
+    authStore.isLoading = false;
 
     if (status !== 200) {
+        toast.error(e.message, {
+            position: toast.POSITION.TOP_LEFT,
+        });
         console.log("🚀 ~ file: axios.ts:40 ~ onResponse ~ status:", status)
     }
 
@@ -80,6 +82,9 @@ const onErrorResponse = (error: AxiosError | Error): Promise<AxiosError> => {
         }
     } else {
         console.log("axios error==>", error);
+        toast.error(error.message, {
+            position: toast.POSITION.TOP_LEFT,
+        });
     }
 
     return Promise.reject(error);

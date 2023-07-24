@@ -153,7 +153,7 @@ import { z } from 'zod'
 import { computed, ref } from "vue";
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import UserLogin from '../../components/Auth/UserLogin.vue'
+import UserLogin from '@/components/Auth/UserLogin.vue'
 
 const contry = ref("");
 const phoneNumber = ref("");
@@ -204,6 +204,7 @@ const submitRegister = handleSubmit(async (values: any) => {
     email.value = values.email
     password.value = values.password
     phoneNumber.value = values.phoneNumber
+    // rememberMe/
     try {
 
 

@@ -6,10 +6,11 @@ export const useAuthStore = defineStore('auth', () => {
     const canAccess = reactive({});
     const userRole = ref(null);
     const token = ref(null);
+    const isLoading = ref(false);
 
     function getUser() {
 
     }
 
-    return { isAuthenticated, getUser, canAccess, userRole, token }
+    return { isAuthenticated, getUser, canAccess, userRole, token, isLoading }
 })

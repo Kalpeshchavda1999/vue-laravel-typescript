@@ -96,6 +96,7 @@ import { toTypedSchema } from '@vee-validate/zod'
 import { z } from 'zod'
 import { useI18n } from 'vue-i18n';
 import axiosInstance from '@/libs/axiosInstance'
+import { toast } from 'vue3-toastify';
 
 const fullName = ref("");
 const contry = ref("");
@@ -103,8 +104,8 @@ const phoneNumber = ref("");
 const email = ref("");
 const password = ref("");
 const loading = ref(false);
-const router = useRouter()
-
+const router = useRouter();
+const country = ref("");
 const countryChanged = (country: any) => {
     contry.value = country?.dialCode
 }
@@ -125,19 +126,28 @@ const zodSchema = z.object({
     phoneNumber: z.string().min(10, VALIDATION_TEXT.PHONE_NUMBER_VALIDATE),
     password: z.string().min(8, VALIDATION_TEXT.PASSWORD_LENGTH),
     confirmPassword: z.string(),
-}).superRefine( async (data, ctx) => {
-    console.log('data.email', data.email !== "", ctx);
+}).superRefine(async (data, ctx) => {
 
     if (data.email !== "") {
 
-        const test  = await axiosInstance.get('test');
+        // // const test = await axiosInstance.get('test');
 
+        // ctx.addIssue({
+        //     code: z.ZodIssueCode.custom,
+        //     message: VALIDATION_TEXT.EMAIL_EXISTS,
+        //     path: ['email'],
+        // })
+    }
 
-        ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: VALIDATION_TEXT.EMAIL_EXISTS,
-            path: ['email'],
-        })
+    if (data.email !== "") {
+
+        // // const test = await axiosInstance.get('test');
+
+        // ctx.addIssue({
+        //     code: z.ZodIssueCode.custom,
+        //     message: VALIDATION_TEXT.EMAIL_EXISTS,
+        //     path: ['email'],
+        // })
     }
 
     if (data.password.includes(data.email)) {
@@ -177,13 +187,30 @@ const submitRegister = handleSubmit(async (values: any) => {
     email.value = values.email
     password.value = values.password
     fullName.value = values.fullName
-    phoneNumber.value = values.phoneNumber
+    const phoneNumberRegex = /(\+\d+)\s(\d+)/;
+    const matches = values.phoneNumber.match(phoneNumberRegex);
+
+    if (matches) {
+        country.value = matches[1]; // +91
+        phoneNumber.value = matches[2]; // 123456789
+    }
     try {
+        const response = await axiosInstance.post('/api/register', {
+            email: email.value,
+            password: password.value,
+            fullName: fullName.value,
+            phoneNumber: phoneNumber.value,
+            contry: contry.value,
+        });
+
+        console.log(response);
 
 
     } catch (e: any) {
-        console.log('error', e.message)
-
+        console.log('error', e)
+        toast.error(e.message, {
+            position: toast.POSITION.TOP_LEFT,
+        });
     } finally {
         loading.value = false
     }

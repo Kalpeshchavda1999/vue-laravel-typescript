@@ -48,9 +48,9 @@ return [
             'driver' => 'sanctum',
             'provider' => 'admins',
         ],
-        'shop_keepers' => [
+        'shopkeepers' => [
             'driver' => 'sanctum',
-            'provider' => 'shop_keepers',
+            'provider' => 'shopkeepers',
         ],
     ],
 
@@ -80,7 +80,7 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\Admin::class,
         ],
-        'shop_keepers' => [
+        'shopkeepers' => [
             'driver' => 'eloquent',
             'model' => App\Models\ShopKeeper::class,
         ],
@@ -114,9 +114,9 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
-        'shop_keepers' => [
+        'shopkeepers' => [
             'provider' => 'users',
-            'table' => 'shop_keepers',
+            'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,
         ],

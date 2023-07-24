@@ -15,12 +15,13 @@ return new class extends Migration {
         Schema::create('shops', function (Blueprint $table) {
             $table->id();
             $table->uuid('shop_id')->unique();
-            $table->uuid('owner_id');
+            $table->unsignedBigInteger('owner_id')->nullable();
             $table->string('name');
             $table->string('email')->nullable();
             $table->string('phone_number')->nullable();
             $table->string('address')->nullable();
             $table->timestamps();
+            $table->foreign('id')->references('id')->on('shopkeepers')->onDelete('cascade');
         });
     }
 
